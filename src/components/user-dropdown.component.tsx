@@ -19,7 +19,10 @@ export const UserDropdown: FC = () => {
 
 	const dropdownRef = useClickAway<HTMLDivElement>(e => {
 		const element = e.target as HTMLDivElement
-		if (element.closest('#user-menu-button')) setIsDropdownOpen(false)
+		if (element.closest('#user-menu-button')) {
+			return
+		}
+		setIsDropdownOpen(false)
 	})
 
 	return (
