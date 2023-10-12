@@ -1,8 +1,10 @@
+'use client'
+
 import { useForm } from 'react-hook-form'
 import { Input } from './input.component'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
+import { use, useState } from 'react'
 import { useCreateBoard } from '@/hooks/use-create-board'
 
 const createBoardSchema = z.object({
