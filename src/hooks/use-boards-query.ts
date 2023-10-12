@@ -18,6 +18,7 @@ export const useBoards = ({ initialData }: UseBoardsQueryOptions) => {
     queryKey: useBoardsQueryKey,
     queryFn: getBoardsFn,
     initialData,
+    refetchOnReconnect: false,
   })
 
   return query

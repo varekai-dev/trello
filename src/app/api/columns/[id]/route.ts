@@ -3,65 +3,87 @@ import { updateColumnDto } from '../dto'
 import { prisma } from '@/core/prisma'
 
 interface ColumnRouteContext {
-	params: {
-		id: string
-	}
+  params: {
+    id: string
+  }
+}
+
+export async function GET(Req: Request, { params }: ColumnRouteContext) {
+  const { id } = params
+
+  const column = await prisma.columns.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      cards: true,
+    },
+  })
+
+  if (!column) {
+    return NextResponse.json({
+      code: 'not_found',
+      message: 'Column not found',
+    })
+  }
+
+  return NextResponse.json(column)
 }
 
 export async function PATCH(req: Request, { params }: ColumnRouteContext) {
-	const { id } = params
-	const bodyRaw = await req.json()
+  const { id } = params
+  const bodyRaw = await req.json()
 
-	const validateBody = updateColumnDto.safeParse(bodyRaw)
+  const validateBody = updateColumnDto.safeParse(bodyRaw)
 
-	if (!validateBody.success) {
-		return NextResponse.json(validateBody.error.issues, { status: 400 })
-	}
+  if (!validateBody.success) {
+    return NextResponse.json(validateBody.error.issues, { status: 400 })
+  }
 
-	const findColumn = await prisma.columns.findUnique({
-		where: {
-			id,
-		},
-	})
+  const findColumn = await prisma.columns.findUnique({
+    where: {
+      id,
+    },
+  })
 
-	if (!findColumn) {
-		return NextResponse.json({
-			code: 'not_found',
-			message: 'Column not found',
-		})
-	}
+  if (!findColumn) {
+    return NextResponse.json({
+      code: 'not_found',
+      message: 'Column not found',
+    })
+  }
 
-	const column = await prisma.columns.update({
-		where: {
-			id,
-		},
-		data: validateBody.data,
-	})
+  const column = await prisma.columns.update({
+    where: {
+      id,
+    },
+    data: validateBody.data,
+  })
 
-	return NextResponse.json(column)
+  return NextResponse.json(column)
 }
 
 export async function DELETE(req: Request, { params }: ColumnRouteContext) {
-	const { id } = params
+  const { id } = params
 
-	const findColumn = await prisma.columns.findUnique({
-		where: {
-			id,
-		},
-	})
+  const findColumn = await prisma.columns.findUnique({
+    where: {
+      id,
+    },
+  })
 
-	if (!findColumn) {
-		return NextResponse.json({
-			code: 'not_found',
-			message: 'Column not found',
-		})
-	}
+  if (!findColumn) {
+    return NextResponse.json({
+      code: 'not_found',
+      message: 'Column not found',
+    })
+  }
 
-	await prisma.columns.delete({
-		where: {
-			id,
-		},
-	})
+  await prisma.columns.delete({
+    where: {
+      id,
+    },
+  })
 
-	return NextResponse.json({})
+  return NextResponse.json({})
 }
