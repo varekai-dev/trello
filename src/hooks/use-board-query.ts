@@ -3,27 +3,27 @@ import { Prisma } from '@prisma/client'
 import { useQuery } from '@tanstack/react-query'
 
 export type BoardPayload = Prisma.BoardsGetPayload<{
-	include: { columns: { include: { cards: true } } }
+  include: { columns: { include: { cards: true } } }
 }>
 
 const getBoardFn = async (boardId: string) => {
-	const { data } = await api.get<BoardPayload>(`api/boards/${boardId}`)
-	return data
+  const { data } = await api.get<BoardPayload>(`api/boards/${boardId}`)
+  return data
 }
 
 interface UseBoardQueryOptions {
-	initialData: BoardPayload
+  initialData: BoardPayload
 }
 
 export const useBoardsQueryKey = ['board']
 
 export const useBoardQuery = ({ initialData }: UseBoardQueryOptions) => {
-	const query = useQuery({
-		//@ts-ignore
-		queryKey: ['board', initialData.id],
-		queryFn: () => getBoardFn(initialData.id),
-		initialData,
-	})
+  const query = useQuery({
+    //@ts-ignore
+    queryKey: ['board', initialData.id],
+    queryFn: () => getBoardFn(initialData.id),
+    initialData,
+  })
 
-	return query
+  return query
 }
