@@ -40,3 +40,15 @@ export const useBoardQuery = ({ initialData }: UseBoardQueryOptions) => {
 
   return query
 }
+
+interface UseCachedBoardQueryOptions {
+  boardId: string
+}
+
+export const useCachedBoardQuery = ({ boardId }: UseCachedBoardQueryOptions) => {
+  const query = useQuery<BoardPayload>(['board', boardId], {
+    networkMode: 'offlineFirst',
+  })
+
+  return query
+}
